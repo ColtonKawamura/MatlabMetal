@@ -12,6 +12,10 @@ I've provided some examples of how to use the library, which also give a quick p
 # Setup and Testing the Installation
 Setup is straightforward: simply make sure the directory is on your MATLAB path.
 
+```matlab
+addpath(genpath('/path/to/MatlabMetal'))
+```
+
 Once you have the path set, run the test classes to make sure everything is operational. To do this, run:
 
     runtests('testMetal')

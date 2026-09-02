@@ -1,0 +1,79 @@
+#include <metal_stdlib>
+using namespace metal;
+
+kernel void multiply(
+    device   float *vOut [[ buffer(0) ]],
+    constant float *vA   [[ buffer(1) ]],
+    constant float *vB   [[ buffer(2) ]],
+    uint id              [[ thread_position_in_grid ]])
+{
+    vOut[id] = vA[id] * vB[id];
+}
+
+kernel void add(
+    device   float *vOut [[ buffer(0) ]],
+    constant float *vA   [[ buffer(1) ]],
+    constant float *vB   [[ buffer(2) ]],
+    uint id              [[ thread_position_in_grid ]])
+{
+    vOut[id] = vA[id] + vB[id];
+}
+
+kernel void subtract(
+    device   float *vOut [[ buffer(0) ]],
+    constant float *vA   [[ buffer(1) ]],
+    constant float *vB   [[ buffer(2) ]],
+    uint id              [[ thread_position_in_grid ]])
+{
+    vOut[id] = vA[id] - vB[id];
+}
+
+kernel void divide(
+    device   float *vOut [[ buffer(0) ]],
+    constant float *vA   [[ buffer(1) ]],
+    constant float *vB   [[ buffer(2) ]],
+    uint id              [[ thread_position_in_grid ]])
+{
+    vOut[id] = vA[id] / vB[id];
+}
+
+kernel void sqrtArr(
+    device   float *vOut [[ buffer(0) ]],
+    constant float *vA   [[ buffer(1) ]],
+    uint id              [[ thread_position_in_grid ]])
+{
+    vOut[id] = sqrt(vA[id]);
+}
+
+kernel void absArr(
+    device   float *vOut [[ buffer(0) ]],
+    constant float *vA   [[ buffer(1) ]],
+    uint id              [[ thread_position_in_grid ]])
+{
+    vOut[id] = abs(vA[id]);
+}
+
+kernel void scale(
+    device   float *vOut  [[ buffer(0) ]],
+    constant float *vA    [[ buffer(1) ]],
+    constant float *scalar[[ buffer(2) ]],
+    uint id               [[ thread_position_in_grid ]])
+{
+    vOut[id] = vA[id] * scalar[0];
+}
+
+kernel void matmul(device float*       C  [[buffer(0)]],
+                   device const float* A  [[buffer(1)]],
+                   device const float* B  [[buffer(2)]],
+                   constant float*     n  [[buffer(3)]],
+                   uint id [[thread_position_in_grid]]) {
+    uint N = (uint)n[0];
+    uint row = id % N;
+    uint col = id / N;
+    float sum = 0.0f;
+    for (uint k = 0; k < N; k++) {
+        sum += A[row + k*N] * B[k + col*N];
+    }
+    C[row + col*N] = sum;
+}
+
